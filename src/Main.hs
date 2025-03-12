@@ -1,21 +1,30 @@
 module Main where
 
-import System.IO (hFlush, stdout)
+import Configuration (loadConfigurationReturningConnection)
 
 main :: IO ()
 main = do
+  connection <- loadConfigurationReturningConnection
   putStrLn "Welcome to my TODO List Manager!"
   loop
 
 loop :: IO ()
 loop = do
-  putStr "Enter command: "
-  hFlush stdout
-  input <- getLine
-  isLooping <- handleInput input
-  if isLooping
-    then loop
-    else return ()
+  pure ()
+
+{-
+    putStr "Enter command: "
+    hFlush stdout
+    input <- getLine
+    putStrLn "Done!"
+-}
+
+{-
+isLooping <- handleInput input
+if isLooping
+  then loop
+  else return ()
+-}
 
 handleInput :: String -> IO Bool
 handleInput "exit" = do
