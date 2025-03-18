@@ -1,12 +1,12 @@
 module Configuration (loadConfigurationReturningConnection) where
 
-import Control.Monad (void, (>=>))
-import Database.SQLite.Simple (Connection, open)
+import Control.Monad (forM_, void, (>=>))
+import Database.SQLite.Simple (Connection, execute_, open)
 import System.Directory.OsPath (XdgDirectory (XdgConfig), createDirectoryIfMissing, doesPathExist, getXdgDirectory)
 import System.IO (writeFile)
 import System.OsPath (OsPath, decodeUtf, takeDirectory, unsafeEncodeUtf, (<.>), (</>))
 
-import SchemaDefinition (createSchema)
+import TodoManager.Schema (createTableStatements)
 
 configDirectory :: IO OsPath
 configDirectory = getXdgDirectory XdgConfig $ unsafeEncodeUtf "todo-manager"
@@ -33,7 +33,7 @@ createConfigurationReturningConnection configurationFilePath = do
   configurationFilePathAsString <- decodeUtf configurationFilePath
   writeFile configurationFilePathAsString ""
   connection <- open configurationFilePathAsString
-  createSchema connection
+  forM_ createTableStatements $ execute_ connection
   pure connection
 
 loadConfigurationReturningConnection :: IO Connection

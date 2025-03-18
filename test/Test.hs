@@ -5,7 +5,6 @@ import System.IO.Unsafe (unsafePerformIO)
 import Test.Hspec
 import Test.Tasty (TestTree, defaultMain, testGroup)
 import Test.Tasty.Hspec
-
 import TodoManager
 
 main = defaultMain tests
