@@ -12,33 +12,40 @@ common base-and-compiler-flags
     -O2
     -Weverything
 
-common sqlite
+common beam-sqlite
   build-depends:
     beam-sqlite >=0.5.4.0 && <0.5.5,
     sqlite-simple >=0.4.19.0 && <0.4.20,
 
+common text
+  build-depends:
+    text >=2.1.2 && <2.2,
+
+common time
+  build-depends:
+    time >=1.12 && <1.13,
+
 library
-  import: base-and-compiler-flags, sqlite
+  import: base-and-compiler-flags, beam-sqlite, text, time
   hs-source-dirs: lib
   exposed-modules:
-    TodoManager.Constructors
     TodoManager.Lenses
     TodoManager.Queries
     TodoManager.Schema
     TodoManager.Types
+    TodoManager.Types.Constructors
+    TodoManager.Types.Getters
 
   default-language: GHC2024
   build-depends:
     beam-core >=0.10.3.1 && <0.10.4,
     microlens >=0.4.14 && <0.4.15,
-    text >=2.1.2 && <2.2,
-    time >=1.12 && <1.13,
     transformers >=0.6.1.2 && <0.6.2,
 
   other-modules: TodoManager.Types.Internal
 
 executable todo-manager-cli
-  import: base-and-compiler-flags, sqlite
+  import: base-and-compiler-flags, beam-sqlite
   main-is: Main.hs
   hs-source-dirs: src
   default-language: GHC2024
@@ -51,7 +58,7 @@ executable todo-manager-cli
     Configuration
 
 test-suite test
-  import: base-and-compiler-flags
+  import: base-and-compiler-flags, beam-sqlite, text, time
   default-language: GHC2024
   type:
     exitcode-stdio-1.0
@@ -60,7 +67,7 @@ test-suite test
     test
 
   main-is:
-    Test.hs
+    Main.hs
 
   build-depends:
     hspec >=2.11.11 && <2.12,
